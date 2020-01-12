@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . '/arrayDeepMerge.php');
+require_once(__DIR__ . '/main.php');
 
 $default_config_file = __DIR__ . '/../config/config.inc.php';
 $my_config_file = __DIR__ . '/../config/my.config.inc.php';
@@ -77,7 +77,7 @@ $defaultConfig = $config;
 if (file_exists($my_config_file)) {
     require_once($my_config_file);
 
-    $config = array_deep_merge($defaultConfig, $config);
+    $config = Tools::array_deep_merge($defaultConfig, $config);
 }
 
 if ($config['dev']) {
