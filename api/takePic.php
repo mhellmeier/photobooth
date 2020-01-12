@@ -3,56 +3,7 @@ header('Content-Type: application/json');
 
 require_once('../lib/config.php');
 
-function takePicture($filename)
-{
-    global $config;
-
-    if ($config['dev']) {
-        $demoFolder = __DIR__ . '/../resources/img/demo/';
-        $devImg = array_diff(scandir($demoFolder), array('.', '..'));
-        copy(
-            $demoFolder . $devImg[array_rand($devImg)],
-            $filename
-        );
-    } elseif ($config['previewCamTakesPic']) {
-        $data = $_POST['canvasimg'];
-        list($type, $data) = explode(';', $data);
-        list(, $data)      = explode(',', $data);
-        $data = base64_decode($data);
-
-        file_put_contents($filename, $data);
-
-        if ($config['previewCamFlipHorizontal']) {
-            $im = imagecreatefromjpeg($filename);
-            imageflip($im, IMG_FLIP_HORIZONTAL);
-            imagejpeg($im, $filename);
-            imagedestroy($im);
-        }
-
-    } else {
-        $dir = dirname($filename);
-        chdir($dir); //gphoto must be executed in a dir with write permission
-        $cmd = sprintf($config['take_picture']['cmd'], $filename);
-
-        exec($cmd, $output, $returnValue);
-
-        if ($returnValue) {
-            die(json_encode([
-                'error' => 'Gphoto returned with an error code',
-                'cmd' => $cmd,
-                'returnValue' => $returnValue,
-                'output' => $output,
-            ]));
-        } elseif (!file_exists($filename)) {
-            die(json_encode([
-                'error' => 'File was not created',
-                'cmd' => $cmd,
-                'returnValue' => $returnValue,
-                'output' => $output,
-            ]));
-        }
-    }
-}
+$picture = new Picture();
 
 if (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file'])) {
     $file = $_POST['file'];
@@ -68,10 +19,9 @@ if (!isset($_POST['style'])) {
     die(json_encode([
         'error' => 'No style provided'
     ]));
-}
-
-if ($_POST['style'] === 'photo') {
-    takePicture($filename_tmp);
+} elseif ($_POST['style'] === 'photo') {
+    $picture->setFilename($filename_tmp);
+    $picture->takePicture();
 } elseif ($_POST['style'] === 'collage') {
     if (!is_numeric($_POST['collageNumber'])) {
         die(json_encode([
@@ -90,7 +40,8 @@ if ($_POST['style'] === 'photo') {
     $basename = substr($filename_tmp, 0, -4);
     $filename = $basename . '-' . $number . '.jpg';
 
-    takePicture($filename);
+    $picture->setFilename($filename);
+    $picture->takePicture();
 
     die(json_encode([
         'success' => 'collage',
