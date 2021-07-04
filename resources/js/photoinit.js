@@ -158,6 +158,7 @@ function initPhotoSwipeFromDOM (gallerySelector) {
             img = img.split('/').pop();
 
             $('<img>').attr('src', 'api/qrcode.php?filename=' + img).appendTo(pswpQR);
+            $('<p>').css('max-width', this.width + 'px').html(L10N.qrHelp).appendTo(pswpQR);
 
             pswpQR.addClass('qr-active').fadeIn('fast');
         }

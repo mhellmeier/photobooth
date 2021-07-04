@@ -45,7 +45,7 @@ const L10N = {
     'busyCollage': 'Collage wird verarbeitet ...',
     'cheese': 'Cheeeeeeeese!',
     'cheeseCollage': 'Cheeeeeeeese Collageeeeeeeeee!',
-    'qrHelp': 'Um das Bild auf dein Handy zu laden, verbinde dich mit dem WLAN <strong>photobooth</strong>',
+    'qrHelp': 'Um das Bild auf dein Handy zu laden:<br /> 1. Verbinde dich mit dem WLAN <strong>Fotobox</strong><br />2. Scanne den QR-Code',
     'error': 'Es ist ein Fehler aufgetreten, bitte versuche es erneut!',
     'reload': 'Seite neu laden',
     'print': 'Drucken',

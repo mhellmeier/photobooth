@@ -23,6 +23,7 @@
 }
 
 .pswp__qr {
+    background-color: #fff;
     width: 500px;
     position: absolute;
     left: 50%;
@@ -33,5 +34,13 @@
 
     img {
         width: 100%;
+    }
+
+    p {
+        font-size: 2em;
+        text-align: center;
+        max-width: 100%;
+        padding: 6px;
+        margin-top: -6px;
     }
 }
